@@ -5,12 +5,16 @@ require('dotenv').config()
 
 const baseUrl = "https://tm.codegra.de/api/v1";
 const login = {
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD,
+    username: process.env.LOGIN_USERNAME,
+    password: process.env.LOGIN_PASSWORD,
     tenantId: process.env.TENANT_ID
 }
 
 const getCourses = async (req: Request, res: Response, next: NextFunction) => {
+
+    console.log(login);
+    
+
     let loginResult: AxiosResponse = await axios.post(`${baseUrl}/login`, login);
     const accessToken = loginResult.data.access_token;
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;

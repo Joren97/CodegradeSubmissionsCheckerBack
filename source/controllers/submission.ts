@@ -3,8 +3,8 @@ import axios, { AxiosResponse } from 'axios';
 import { Assignment } from '../types/assignment';
 const baseUrl = "https://tm.codegra.de/api/v1";
 const login = {
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD,
+    username: process.env.LOGIN_USERNAME,
+    password: process.env.LOGIN_PASSWORD,
     tenantId: process.env.TENANT_ID
 }
 
