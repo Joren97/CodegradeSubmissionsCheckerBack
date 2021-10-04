@@ -11,10 +11,6 @@ const login = {
 }
 
 const getCourses = async (req: Request, res: Response, next: NextFunction) => {
-
-    console.log(login);
-    
-
     let loginResult: AxiosResponse = await axios.post(`${baseUrl}/login`, login);
     const accessToken = loginResult.data.access_token;
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
