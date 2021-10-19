@@ -1,4 +1,5 @@
 export interface Assignment {
     name: string,
-    submitted: boolean
+    submitted: boolean,
+    grade: number
 }

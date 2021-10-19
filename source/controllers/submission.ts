@@ -51,7 +51,8 @@ const getSubmissions = async (req: Request, res: Response, next: NextFunction) =
     assignmentIds.forEach(x => {
         resultToReturn.push({
             name: x.name,
-            submitted: result.find((y: any) => y.assignment_id == x.id) != undefined
+            submitted: result.find((y: any) => y.assignment_id == x.id) != undefined,
+            grade: x.grade
         })
     })
 
