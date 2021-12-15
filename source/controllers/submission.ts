@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosResponse } from 'axios';
 import { Assignment } from '../types/assignment';
+require('dotenv').config()
 const baseUrl = "https://tm.codegra.de/api/v1";
 const login = {
     username: process.env.LOGIN_USERNAME,
@@ -45,8 +46,7 @@ const getSubmissions = async (req: Request, res: Response, next: NextFunction) =
     })
 
     const result = requestResults.reduce((accumulator: any, value: any) => accumulator.concat(value), []);
-
-
+   
 
     assignmentIds.forEach(x => {
         const resultFromUser = result.find((y: any) => y.assignment_id == x.id);
@@ -54,13 +54,36 @@ const getSubmissions = async (req: Request, res: Response, next: NextFunction) =
         resultToReturn.push({
             name: x.name,
             submitted: resultFromUser != undefined,
-            grade: resultFromUser != undefined && resultFromUser.grade
+            grade: (resultFromUser != undefined && resultFromUser.grade) ? Math.round(resultFromUser.grade) : 0
         })
     })
 
+    let percentages: Array<{chapter: string, score: number, max: number}> = [];
+    const gradedAssignments = ["01","02","03","04","05"]
+
+    for (let i = 1; i <= 10; i++) {
+        const chapter = pad(i, 2);
+        let max = 0;
+        let achieved = 0;
+        gradedAssignments.forEach(name => {
+            const assignment = resultToReturn.find(x => x.name.includes(`${chapter}.${name}`));
+
+            if (assignment) {
+                max += 10;
+                achieved += assignment.grade;
+            }
+        });  
+        percentages.push({chapter, score: achieved, max})    
+    }
+
     return res.status(200).json(
-        resultToReturn
+        {submissions: resultToReturn, percentages}
     );
 };
 
 export default { getSubmissions };
+
+function pad(num: number, size: number) {
+    var s = "000000000" + num;
+    return s.substr(s.length-size);
+}
