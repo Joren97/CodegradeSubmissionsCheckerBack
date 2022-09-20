@@ -1,8 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosResponse, AxiosStatic } from 'axios';
-import { Assignment } from '../types/assignment';
 require('dotenv').config()
-const baseUrl = "https://tm.codegra.de/api/v1";
 const login = {
     username: process.env.CODEGRADE_USERNAME,
     password: process.env.CODEGRADE_PASSWORD,
@@ -10,7 +7,7 @@ const login = {
 }
 
 const getLoggedInClient = async (client: AxiosStatic) => {
-    let { data: { access_token } }: AxiosResponse = await axios.post(`${baseUrl}/login`, login);
+    let { data: { access_token } }: AxiosResponse = await axios.post(`${process.env.CODEGRADE_BASE_URL}/login`, login);
     client.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
     return client;
 }
