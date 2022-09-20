@@ -4,8 +4,9 @@ import courseController from '../controllers/course';
 const router = express.Router();
 
 
-/* Submissions */
 router.get("/course/:courseId", courseController.getCourseWithAssignments)
+router.get("/course", courseController.getCourses)
+
 router.get("/submission/:assignmentId", submissionController.getGradeForAssignment)
 
 export = router;

@@ -2,6 +2,13 @@ import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosResponse } from 'axios';
 import { Assignment } from '../types/assignment';
 import { getLoggedInClient } from './helpers';
+import courses from '../enums/courses';
+
+const getCourses = async (req: Request, res: Response, next: NextFunction) => {
+    return res.status(200).json(
+        courses
+    );
+}
 
 const getCourseWithAssignments = async (req: Request, res: Response, next: NextFunction) => {
     const courseId: string = <string>req.params.courseId;
@@ -24,4 +31,4 @@ const getCourseWithAssignments = async (req: Request, res: Response, next: NextF
     );
 }
 
-export default { getCourseWithAssignments };
+export default { getCourseWithAssignments, getCourses };
