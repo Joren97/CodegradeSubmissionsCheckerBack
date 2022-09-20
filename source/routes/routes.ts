@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 /* Submissions */
-router.get("/submissions", submissionController.getSubmissions)
-router.get("/course", courseController.getCourses)
+router.get("/course/:courseId", courseController.getCourseWithAssignments)
+router.get("/submission/:assignmentId", submissionController.getGradeForAssignment)
 
 export = router;
