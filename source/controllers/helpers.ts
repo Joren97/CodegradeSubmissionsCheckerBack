@@ -22,4 +22,10 @@ const getLatestResultForAssignment = async (assignmentId: string, userId: string
     return data;
 }
 
-export { getLoggedInClient, getUserIdFromStudentNumber, getLatestResultForAssignment }
+const sleep = (ms: number) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+
+export { getLoggedInClient, getUserIdFromStudentNumber, getLatestResultForAssignment, sleep }

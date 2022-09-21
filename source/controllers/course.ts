@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import axios, { AxiosResponse } from 'axios';
 import { Assignment } from '../types/assignment';
-import { getLoggedInClient, getUserIdFromStudentNumber } from './helpers';
+import { getLoggedInClient, getUserIdFromStudentNumber, sleep } from './helpers';
 import courses from '../enums/courses';
 import dummyData from '../enums/offlineDummyData';
 
@@ -42,10 +42,11 @@ const getCourseWithAssignmentsAndGrade = async (req: Request, res: Response, nex
     })
 
     // Wait for all requests to finish    
-    let requestResults: Array<any> = [];
     await Promise.all(requests).then((values) => {
         values.forEach((x: any) => {
+            // If a submission is found
             if (x.data.length > 0) {
+                // Get the assignment and set the grade to the grade of the latest submission
                 let assignment = assignmentsToShow.find((y: Assignment) => y.id === x.data[0].assignment_id);
                 assignment!.grade = x.data[0].grade;
             }
@@ -56,9 +57,19 @@ const getCourseWithAssignmentsAndGrade = async (req: Request, res: Response, nex
     let course = courses.find(course => course.codegradeId === parseInt(courseId));
 
     // Add assignments to chapters
-    course?.chapters.forEach(chapter => {
-        chapter.assignments = assignmentsToShow.filter((assignment: Assignment) => assignment.name.substring(0, 2) === chapter.number);
-    });
+    assignmentsToShow.forEach((a => {
+        const assignmentChapterNumber = a.name.substring(0, 2);
+        const assignmentNumber = a.name.substring(3, 5);
+        const chapter = course?.chapters.find(c => c.number === assignmentChapterNumber);
+        console.log("Assignment: " + a.name + " Chapter: " + assignmentChapterNumber + " AssignmentNumber: " + assignmentNumber);
+        // Check whether the assignment is mandatory
+        a.mandatory = chapter!.mandatoryAssignments.includes(assignmentNumber);
+        chapter?.assignments.push(a);
+    }));
+
+    // course?.chapters.forEach(chapter => {
+    //     chapter.assignments = assignmentsToShow.filter((assignment: Assignment) => assignment.name.substring(0, 2) === chapter.number);
+    // });
 
     return res.status(200).json(
         course
@@ -67,6 +78,8 @@ const getCourseWithAssignmentsAndGrade = async (req: Request, res: Response, nex
 
 const getCourseWithAssignmentsAndGradeOffline = async (req: Request, res: Response, next: NextFunction) => {
     console.log("getCourseWithAssignmentsAndGradeOffline")
+
+    await sleep(2500);
 
     return res.status(200).json(
         dummyData

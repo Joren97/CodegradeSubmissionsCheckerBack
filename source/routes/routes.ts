@@ -8,7 +8,7 @@ router.get("/course/:courseId", courseController.getCourseWithAssignmentsAndGrad
 router.get("/course", courseController.getCourses)
 
 router.get("/offline/course/:courseId", courseController.getCourseWithAssignmentsAndGradeOffline)
-router.get("offline/course", courseController.getCourses)
+router.get("/offline/course", courseController.getCourses)
 
 // router.get("/submission/:assignmentId", submissionController.getGradeForAssignment)
 
