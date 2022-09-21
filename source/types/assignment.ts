@@ -4,4 +4,5 @@ export interface Assignment {
     submitted: boolean,
     grade: number,
     mandatory: boolean
+    deadline: string
 }

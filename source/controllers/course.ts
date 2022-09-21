@@ -65,11 +65,8 @@ const getCourseWithAssignmentsAndGrade = async (req: Request, res: Response, nex
         // Check whether the assignment is mandatory
         a.mandatory = chapter!.mandatoryAssignments.includes(assignmentNumber);
         chapter?.assignments.push(a);
+        if (a.mandatory) chapter!.deadline = a.deadline;
     }));
-
-    // course?.chapters.forEach(chapter => {
-    //     chapter.assignments = assignmentsToShow.filter((assignment: Assignment) => assignment.name.substring(0, 2) === chapter.number);
-    // });
 
     return res.status(200).json(
         course
