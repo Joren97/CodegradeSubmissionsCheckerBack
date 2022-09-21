@@ -3,6 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { Assignment } from '../types/assignment';
 import { getLoggedInClient, getUserIdFromStudentNumber } from './helpers';
 import courses from '../enums/courses';
+import dummyData from '../enums/offlineDummyData';
 
 const getCourses = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(200).json(
@@ -64,4 +65,12 @@ const getCourseWithAssignmentsAndGrade = async (req: Request, res: Response, nex
     );
 }
 
-export default { getCourseWithAssignmentsAndGrade, getCourses };
+const getCourseWithAssignmentsAndGradeOffline = async (req: Request, res: Response, next: NextFunction) => {
+    console.log("getCourseWithAssignmentsAndGradeOffline")
+
+    return res.status(200).json(
+        dummyData
+    );
+}
+
+export default { getCourseWithAssignmentsAndGrade, getCourses, getCourseWithAssignmentsAndGradeOffline };
